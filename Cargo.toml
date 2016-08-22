@@ -1,0 +1,11 @@
+[package]
+name = "gm2"
+version = "0.1.0"
+authors = ["Michael Shaw <michaeljshaw@gmail.com>"]
+
+[dependencies]
+glium = { version = "0.15.0", features = ["glutin"] }
+glutin = "0.6.1"
+genmesh = "0.4"
+image = "0.10.1"
+obj = { version = "0.5", features = ["usegenmesh"] }
