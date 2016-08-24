@@ -4,47 +4,33 @@ extern crate glium;
 extern crate glutin;
 
 use gm2::game;
-use gm2::render;
-use gm2::shader;
+use gm2::core;
 
 use glutin::Event;
 use glium::Surface;
 
 fn main() {
-  let window = render::build_window();
-  let rs = render::renderState(&window);
+  let window = core::render::build_window();
 
-  let pr = shader::simple_program(&window);
+  let rs = core::render::renderState(&window);
+
+  let pr = core::shader::simple_program(&window);
 
   let mut state = game::GameState { tick: 12 };
   state = game::update(state);
 
-  game::start_loop(|| {
+  core::game::start_loop(|| {
     // building the uniforms
-    let uniforms = uniform! {
-        matrix: [
-            [1.0, 0.0, 0.0, 0.0],
-            [0.0, 1.0, 0.0, 0.0],
-            [0.0, 0.0, 1.0, 0.0],
-            [0.0, 0.0, 0.0, 1.0f32]
-        ]
-    };
-
-    // drawing a frame
-    let mut target = window.draw();
-    target.clear_color(0.0, 0.0, 0.0, 0.0);
-    target.draw(&rs.vertices, &rs.indices, &rs.program, &uniforms, &Default::default()).unwrap();
-    target.finish().unwrap();
+    core::render::render(&window, &rs);
 
     // polling and handling the events received by the window
     for event in window.poll_events() {
         match event {
-            glutin::Event::Closed => return game::Action::Stop,
-            glutin::Event::KeyboardInput(glutin::ElementState::Released, _, Some(glutin::VirtualKeyCode::Escape)) => return game::Action::Stop,
+            glutin::Event::Closed | glutin::Event::KeyboardInput(glutin::ElementState::Released, _, Some(glutin::VirtualKeyCode::Escape)) => return core::game::Action::Stop,
             e => println!("got {:?}", e)
         }
     }
 
-    game::Action::Continue
+    core::game::Action::Continue
   });
 }

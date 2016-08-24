@@ -4,8 +4,11 @@
 #[macro_use]
 extern crate glium;
 
-pub mod camera;
+pub mod core {
+  pub mod camera;
+  pub mod render;
+  pub mod shader;
+  pub mod game;
+}
 pub mod game;
 pub mod input;
-pub mod render;
-pub mod shader;
