@@ -18,18 +18,19 @@ pub fn simple_program<T>(display : &T) -> glium::Program where T : glium::backen
             #version 330
 
             uniform mat4 matrix;
+            uniform vec4 u_color;
 
             in vec3 position;
             in vec3 tex_coord;
             in vec4 color;
 
-            out vec4 vColor;
-            out vec3 vTexCoord;
+            out vec4 v_color;
+            out vec3 v_tex_coord;
 
             void main() {
                 gl_Position = vec4(position, 1.0) * matrix;
-                vColor = color;
-                vTexCoord = tex_coord;
+                v_color = color * u_color;
+                v_tex_coord = tex_coord;
             }
         ",
 
@@ -37,16 +38,15 @@ pub fn simple_program<T>(display : &T) -> glium::Program where T : glium::backen
             #version 330
 
             uniform sampler2DArray u_texture_array;
-            uniform vec4 u_color;
 
-            in vec4 vColor;
-            in vec3 vTexCoord;
+            in vec4 v_color;
+            in vec3 v_tex_coord;
 
             out vec4 f_color;
 
             void main() {
-                vec4 tColour = texture(u_texture_array, vTexCoord);
-                f_color = tColour * vColor * u_color;
+                vec4 t_colour = texture(u_texture_array, v_tex_coord);
+                f_color = t_colour * v_color;
             }
         "
     },
