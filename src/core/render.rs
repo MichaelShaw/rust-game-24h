@@ -28,8 +28,7 @@ pub fn render_state<F>(display : &F) -> RenderState where F : glium::backend::Fa
   let image = image::open(&Path::new("img/small.scene.png")).unwrap().to_rgba();
   let image_dimensions = image.dimensions();
   let image_raw = glium::texture::RawImage2d::from_raw_rgba_reversed(image.into_raw(), image_dimensions);
-  let images = vec![image_raw];
-  let texture_array = glium::texture::Texture2dArray::new(display, images).unwrap();
+  let texture_array = glium::texture::Texture2dArray::new(display, vec![image_raw]).unwrap();
 
   RenderState {
     program: shader::simple_program(display),
@@ -48,12 +47,6 @@ pub struct QuadTesselator<T> {
 }
 
 impl<T : Copy> QuadTesselator<T> {
-  // fn addMultiple(&mut self, t:[T]) {
-  //   // for ele in t {
-  //   //   self.add(self, ele)
-  //   // }
-  // }
-
   fn add(&mut self, t:T) {
     self.vertices.push(t);
     self.n += 1;
