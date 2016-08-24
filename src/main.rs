@@ -14,10 +14,15 @@ fn main() {
 
   // let mut state = game::GameState { tick: 12 };
   // state = game::update(state);
+  let mut color: [f32; 4] = [1.0, 1.0, 1.0, 1.0];
+
+
 
   core::game::start_loop(|| {
+    color[1] = (color[1] + 0.01) % 1.0;
+
     // building the uniforms
-    core::render::render(&window, &render_state);
+    core::render::render(&window, &render_state, color);
 
     // polling and handling the events received by the window
     for event in window.poll_events() {

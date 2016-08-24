@@ -36,7 +36,8 @@ pub fn simple_program<T>(display : &T) -> glium::Program where T : glium::backen
         fragment: "
             #version 330
 
-            uniform sampler2DArray textureArray;
+            uniform sampler2DArray u_texture_array;
+            uniform vec4 u_color;
 
             in vec4 vColor;
             in vec3 vTexCoord;
@@ -44,8 +45,8 @@ pub fn simple_program<T>(display : &T) -> glium::Program where T : glium::backen
             out vec4 f_color;
 
             void main() {
-                vec4 tColour = texture(textureArray, vTexCoord);
-                f_color = tColour * vColor;
+                vec4 tColour = texture(u_texture_array, vTexCoord);
+                f_color = tColour * vColor * u_color;
             }
         "
     },

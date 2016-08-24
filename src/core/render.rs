@@ -62,7 +62,7 @@ impl<T : Copy> QuadTesselator<T> {
   }
 }
 
-pub fn render(display : &glium::Display , rs:&RenderState) -> () {
+pub fn render(display : &glium::Display, rs:&RenderState, color: [f32; 4]) -> () {
   let mut quad_tesselator : QuadTesselator<PTCVertex> = QuadTesselator { vertices: Vec::new(), n: 0};
 
   quad_tesselator.add_quad(
@@ -83,13 +83,13 @@ pub fn render(display : &glium::Display , rs:&RenderState) -> () {
       [0.0, 0.0, 1.0, 0.0],
       [0.0, 0.0, 0.0, 1.0f32]
     ],
-    textureArray: &rs.texture
+    u_texture_array: &rs.texture,
+    u_color: color,
   };
 
   // drawing a frame
   let mut target = display.draw();
   target.clear_color(0.0, 0.0, 0.0, 0.0);
-
   target.draw(&vertex_buffer, &index::NoIndices(index::PrimitiveType::TrianglesList), &rs.program, &uniforms, &Default::default()).unwrap();
   target.finish().unwrap();
 
