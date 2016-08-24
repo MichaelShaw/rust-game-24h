@@ -7,26 +7,22 @@ use gm2::game;
 use gm2::core;
 
 use glutin::Event;
-use glium::Surface;
 
 fn main() {
   let window = core::render::build_window();
+  let render_state = core::render::render_state(&window);
 
-  let rs = core::render::renderState(&window);
-
-  let pr = core::shader::simple_program(&window);
-
-  let mut state = game::GameState { tick: 12 };
-  state = game::update(state);
+  // let mut state = game::GameState { tick: 12 };
+  // state = game::update(state);
 
   core::game::start_loop(|| {
     // building the uniforms
-    core::render::render(&window, &rs);
+    core::render::render(&window, &render_state);
 
     // polling and handling the events received by the window
     for event in window.poll_events() {
         match event {
-            glutin::Event::Closed | glutin::Event::KeyboardInput(glutin::ElementState::Released, _, Some(glutin::VirtualKeyCode::Escape)) => return core::game::Action::Stop,
+            Event::Closed | Event::KeyboardInput(glutin::ElementState::Released, _, Some(glutin::VirtualKeyCode::Escape)) => return core::game::Action::Stop,
             e => println!("got {:?}", e)
         }
     }

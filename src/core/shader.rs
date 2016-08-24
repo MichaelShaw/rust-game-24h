@@ -1,15 +1,17 @@
+#![allow(dead_code)]
+
 extern crate glium;
 
 #[derive(Copy, Clone)]
 pub struct PTCVertex {
     pub position: [f32; 3],
-    pub tex: [f32; 3],
+    pub tex_coord: [f32; 3],
     pub color: [f32; 4],
 }
 
-implement_vertex!(PTCVertex, position, tex, color);
+implement_vertex!(PTCVertex, position, tex_coord, color);
 
-pub fn simple_program<T : glium::backend::Facade>(display : &T) -> glium::Program {
+pub fn simple_program<T>(display : &T) -> glium::Program where T : glium::backend::Facade {
   let program = program!(display,
     330 => {
         vertex: "
@@ -18,26 +20,32 @@ pub fn simple_program<T : glium::backend::Facade>(display : &T) -> glium::Progra
             uniform mat4 matrix;
 
             in vec3 position;
-            in vec3 tex;
+            in vec3 tex_coord;
             in vec4 color;
 
             out vec4 vColor;
+            out vec3 vTexCoord;
 
             void main() {
                 gl_Position = vec4(position, 1.0) * matrix;
                 vColor = color;
+                vTexCoord = tex_coord;
             }
         ",
 
         fragment: "
             #version 330
 
+            uniform sampler2DArray textureArray;
+
             in vec4 vColor;
+            in vec3 vTexCoord;
 
             out vec4 f_color;
 
             void main() {
-                f_color = vec4(vColor);
+                vec4 tColour = texture(textureArray, vTexCoord);
+                f_color = tColour * vColor;
             }
         "
     },

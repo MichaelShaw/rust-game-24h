@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 pub struct CameraState {
     aspect_ratio: f32,
     position: (f32, f32, f32),
