@@ -47,30 +47,32 @@ pub struct QuadTesselator<T> {
 }
 
 impl<T : Copy> QuadTesselator<T> {
-  fn add(&mut self, t:T) {
-    self.vertices.push(t);
-    self.n += 1;
-    if self.n % 4 == 0 {
-      let va = self.vertices[self.vertices.len() - 4];
-      self.vertices.push(va);
-
-      let vb = self.vertices[self.vertices.len() - 3];
-      self.vertices.push(vb);
+  fn add_quad(&mut self, ts:[T; 4]) {
+    for ele in ts.iter() {
+      self.vertices.push(ele.clone());
     }
+    let va = self.vertices[self.vertices.len() - 4];
+    self.vertices.push(va);
+    let vb = self.vertices[self.vertices.len() - 3];
+    self.vertices.push(vb);
   }
 
   fn clear(&mut self) {
     self.vertices.clear();
-    self.n = 0;
   }
 }
 
 pub fn render(display : &glium::Display , rs:&RenderState) -> () {
   let mut quad_tesselator : QuadTesselator<PTCVertex> = QuadTesselator { vertices: Vec::new(), n: 0};
-  quad_tesselator.add(PTCVertex { position: [-0.5, -0.5, 0.0], tex_coord: [0.0, 0.0, 0.0], color: [0.0, 1.0, 0.0, 1.0] });
-  quad_tesselator.add(PTCVertex { position: [-0.5,  0.5, 0.0], tex_coord: [0.0, 1.0, 0.0], color: [0.0, 0.0, 1.0, 1.0] });
-  quad_tesselator.add(PTCVertex { position: [0.5,  0.5, 0.0], tex_coord: [1.0, 1.0, 0.0], color: [0.0, 0.0, 1.0, 1.0] });
-  quad_tesselator.add(PTCVertex { position: [0.5,  -0.5, 0.0], tex_coord: [1.0, 0.0, 0.0], color: [0.0, 0.0, 1.0, 1.0] });
+
+  quad_tesselator.add_quad(
+    [
+      PTCVertex { position: [-0.5, -0.5, 0.0], tex_coord: [0.0, 0.0, 0.0], color: [0.5, 1.0, 0.5, 1.0] },
+      PTCVertex { position: [-0.5,  0.5, 0.0], tex_coord: [0.0, 1.0, 0.0], color: [0.25, 0.25, 1.0, 1.0] },
+      PTCVertex { position: [0.5,   0.5, 0.0], tex_coord: [1.0, 1.0, 0.0], color: [1.0, 0.5, 0.5, 1.0] },
+      PTCVertex { position: [0.5,  -0.5, 0.0], tex_coord: [1.0, 0.0, 0.0], color: [0.5, 0.1, 1.0, 1.0] }
+    ]
+  );
 
   let vertex_buffer = glium::VertexBuffer::new(display,&quad_tesselator.vertices).unwrap();
 
