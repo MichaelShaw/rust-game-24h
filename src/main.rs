@@ -5,6 +5,7 @@ extern crate glutin;
 extern crate cgmath;
 
 use gm2::core;
+use gm2::core::{Vec3};
 use gm2::core::input;
 
 use glutin::Event;
@@ -20,6 +21,11 @@ fn main() {
 
   let mut time = 0.0_f64;
 
+  use cgmath::{Zero};
+
+  let ground_plane = gm2::core::camera::Plane::from_origin_normal(Vec3::zero(), Vec3::unit_y()); 
+  
+
   core::game::start_loop(|| {
     time = time + (1.0 / 60.0);
     // let cyclical_time = (time % 8.0) / 8.0;
@@ -30,14 +36,23 @@ fn main() {
 
     core::render::render(&window, &render_state, time, color);
 
+
     // polling and handling the events received by the window
     let evs : Vec<glutin::Event> = window.poll_events().collect();
 
     let new_input_state = input::produce(&input_state, &evs);
     if input_state != new_input_state {
       println!("input state -> {:?}", new_input_state);
+      let (mouse_x, mouse_y) = input_state.mouse.at;
+      let line = render_state.ray_for_mouse_position(mouse_x, mouse_y);
+
+      let intersection = line.and_then(|l| l.intersects(ground_plane) );
+
+      println!("line -> {:?} intersection {:?}", line, intersection);
     }
     input_state = new_input_state;
+
+    
     
     for event in evs {
         match event {

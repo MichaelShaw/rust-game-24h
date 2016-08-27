@@ -9,10 +9,11 @@ extern crate cgmath;
 
 use glium::index;
 use glium::Surface;
-use core::{Vec3, Mat3, Mat4};
+use core::{Vec3, Mat3, Mat4, Vec4};
 use core::render::quads::GeometryTesselator;
 use core::camera;
-use cgmath::{Rad, Zero};
+use cgmath::{Rad};
+
 
 pub fn build_window() -> glium::backend::glutin_backend::GlutinFacade { //glium::backend::glutin_backend::GlutinFacade
   use glium::DisplayBuild;
@@ -63,10 +64,26 @@ pub struct RenderState {
 }
 
 impl RenderState {
-  pub fn ray_for_mouse_position(x:u32, y:u32) -> camera::Line {
-    camera::Line {
-      from: Vec3::zero(),
-      to: Vec3::zero(),
+  pub fn ray_for_mouse_position(&self, x:i32, y:i32) -> Option<camera::Line> {
+    let (width, height) = self.dimensions;
+    if 0 <= x && x < (width as i32) && 0 <= y && y < (height as i32) {
+      let n_x = (x as f64) / (width as f64) * 2.0 - 1.0;
+      let n_y = ((y as f64) / (height as f64) * 2.0 - 1.0) * -1.0;
+
+      let front = Vec4::new(n_x, n_y, -1.0, 1.0);
+      let back = Vec4::new(n_x, n_y, 1.0, 1.0);
+
+      let ivp = self.inverse_view_projection();
+
+      let front_world = ivp * front;
+      let back_world = ivp * back;
+
+      Some(camera::Line {
+        from: front_world.truncate() / front_world.w,
+        to: back_world.truncate() / back_world.w,
+      })
+    } else {
+      None
     }
   } 
 
@@ -85,6 +102,12 @@ impl RenderState {
 
   pub fn view_projection(&self) -> Mat4 {
     self.projection() * self.view()
+  }
+
+  pub fn inverse_view_projection(&self) -> Mat4 {
+    use cgmath::SquareMatrix;
+    let vp = self.view_projection();
+    vp.invert().unwrap()
   }
 }
 

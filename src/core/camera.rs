@@ -1,16 +1,54 @@
 extern crate cgmath;
 
 use core::{Mat4, Vec3};
-use cgmath::Rad;
+use cgmath::*;
 
+#[derive(PartialEq, Debug, Copy, Clone)]
 pub struct Camera {
   pub at: Vec3,
   pub pitch: Rad<f64>
 }
 
+#[derive(PartialEq, Debug, Copy, Clone)]
 pub struct Line {
   pub from: Vec3,
   pub to: Vec3,
+}
+
+impl Line {
+  pub fn intersects(&self, plane:Plane) -> Option<Vec3> {
+    let epsilon = 0.0000001;
+
+    let direction = (self.to - self.from).normalize();
+    let denominator = dot(plane.normal, direction);
+
+    if denominator > -epsilon && denominator < epsilon {
+      return None
+    }
+    let numerator = -(dot(plane.normal, self.from) - plane.coefficient);
+    let ratio = numerator / denominator;
+
+    if ratio < epsilon {
+      None
+    } else {
+      Some((direction * ratio) + self.from)
+    }
+  }
+}
+
+#[derive(PartialEq, Debug, Copy, Clone)]
+pub struct Plane {
+  pub normal: Vec3,
+  pub coefficient: f64,
+}
+
+impl Plane {
+  pub fn from_origin_normal(origin:Vec3, normal:Vec3) -> Plane {
+    Plane {
+      normal:normal,
+      coefficient: (normal.x * origin.x + normal.y * origin.y + normal.z * origin.z),
+    }
+  }
 }
 
 pub fn view(pitch: Rad<f64>, at: Vec3) -> Mat4 {
