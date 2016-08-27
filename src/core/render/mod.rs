@@ -117,13 +117,22 @@ pub struct TiledTexture {
   pub tiles: u32,
 }
 
-pub fn render(display: &glium::Display, rs:&RenderState, time:f64, color: [f32; 4]) {
+pub fn round_down(f:f64) -> i32 {
+  if f < 0.0 {
+    f as i32 - 1
+  } else {
+    f as i32
+  }
+}
+
+pub fn render(display: &glium::Display, rs:&RenderState, time:f64, color: [f32; 4], intersection: &Option<Vec3>) {
   let tesselator_scale = Vec3::new(rs.units_per_pixel(), rs.units_per_pixel(), rs.units_per_pixel());
 
   let mut tesselator = GeometryTesselator::new(tesselator_scale);
   let ground_tile = TextureRegion::at(&rs.texture, 0, 0);
   let man = TextureRegion::at(&rs.texture, 1, 0);
   let man_shadow = TextureRegion::at(&rs.texture, 2, 0);
+  let indicator = TextureRegion::at(&rs.texture, 3, 0);
 
   for x in 0..16 {
     for z in 0..16 {
@@ -134,6 +143,12 @@ pub fn render(display: &glium::Display, rs:&RenderState, time:f64, color: [f32; 
 
   tesselator.draw_wall_base_anchored_at(&man, 0, Vec3::new(1.5, 0.0, 1.5), 0.0, false);
   tesselator.draw_floor_centre_anchored_at(&man_shadow, 0, Vec3::new(1.5, 0.0, 1.5), 0.01, false);
+  if let &Some(its) = intersection {
+    let x = round_down(its.x);
+    let z = round_down(its.z);
+    tesselator.draw_floor_tile(&indicator, 0, x as f64, 0.0, z as f64, 0.02, false);
+  }
+
   
   let vertex_buffer = glium::VertexBuffer::persistent(display,&tesselator.tesselator.vertices).unwrap();
 
