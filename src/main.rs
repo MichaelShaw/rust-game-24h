@@ -4,46 +4,45 @@ extern crate glium;
 extern crate glutin;
 extern crate cgmath;
 
-use gm2::game;
 use gm2::core;
+use gm2::core::input;
 
 use glutin::Event;
-use gm2::core::{Vec3, Mat3, Mat4};
-use gm2::core::camera;
-use std::f64::consts::PI;
-use cgmath::Rad;
-use glium::Surface;
 
 fn main() {
   let window = core::render::build_window();
   let mut render_state = core::render::render_state(&window);
-
+  let mut input_state = core::input::InputState::default();
+  
   // let mut state = game::GameState { tick: 12 };
   // state = game::update(state);
-  let mut color: [f32; 4] = [1.0, 1.0, 1.0, 1.0];
+  let color: [f32; 4] = [1.0, 1.0, 1.0, 1.0];
 
   let mut time = 0.0_f64;
 
   core::game::start_loop(|| {
-    // color[1] = (color[1] + 0.01) % 1.0;
     time = time + (1.0 / 60.0);
-
-    let cyclical_time = (time % 8.0) / 8.0;
+    // let cyclical_time = (time % 8.0) / 8.0;
     // println!("cyclical time -> {}", cyclical_time);
-    // {
-      // render_state.dimensions = window.get_context().get_framebuffer_dimensions();
-    // }
-    render_state.camera.pitch = Rad(cyclical_time);
-
-    // render_state.view = camera::view(Rad(0.25 * PI), Vec3::new(8.0, 0.0, 8.0));
+    
+    render_state.dimensions = window.get_framebuffer_dimensions();
+    // render_state.camera.pitch = Rad(cyclical_time);
 
     core::render::render(&window, &render_state, time, color);
 
     // polling and handling the events received by the window
-    for event in window.poll_events() {
+    let evs : Vec<glutin::Event> = window.poll_events().collect();
+
+    let new_input_state = input::produce(&input_state, &evs);
+    if input_state != new_input_state {
+      println!("input state -> {:?}", new_input_state);
+    }
+    input_state = new_input_state;
+    
+    for event in evs {
         match event {
             Event::Closed | Event::KeyboardInput(glutin::ElementState::Released, _, Some(glutin::VirtualKeyCode::Escape)) => return core::game::Action::Stop,
-            e => println!("got {:?}", e)
+            _ => (),// println!("got {:?}", e)
         }
     }
 

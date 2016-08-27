@@ -12,7 +12,7 @@ use glium::Surface;
 use core::{Vec3, Mat3, Mat4};
 use core::render::quads::GeometryTesselator;
 use core::camera;
-use cgmath::{Rad};
+use cgmath::{Rad, Zero};
 
 pub fn build_window() -> glium::backend::glutin_backend::GlutinFacade { //glium::backend::glutin_backend::GlutinFacade
   use glium::DisplayBuild;
@@ -45,7 +45,7 @@ pub fn render_state<F>(display: &F) -> RenderState where F : glium::backend::Fac
     texture: TiledTexture{ texture: texture_array, tiles: 32 },
     camera: camera::Camera {
       at: Vec3::new(8.0, 0.0, 8.0),
-      pitch: Rad(-PI / 4.0_f64),
+      pitch: Rad(PI / 4.0_f64),
     },
     pixels_per_unit: 16.0, // fixed for a game, really ...
     zoom: 3.0, // moveable
@@ -63,6 +63,13 @@ pub struct RenderState {
 }
 
 impl RenderState {
+  pub fn ray_for_mouse_position(x:u32, y:u32) -> camera::Line {
+    camera::Line {
+      from: Vec3::zero(),
+      to: Vec3::zero(),
+    }
+  } 
+
   pub fn view(&self) -> Mat4 {
     camera::view(self.camera.pitch, self.camera.at)
   }

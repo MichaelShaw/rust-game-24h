@@ -8,4 +8,3 @@ glium = { version = "0.15.0", features = ["glutin"] }
 glutin = "0.6.1"
 image = "0.10.1"
 cgmath = "0.11.0"
-

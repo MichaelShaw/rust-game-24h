@@ -8,4 +8,3 @@ extern crate image;
 
 pub mod core;
 pub mod game;
-pub mod input;

@@ -8,6 +8,11 @@ pub struct Camera {
   pub pitch: Rad<f64>
 }
 
+pub struct Line {
+  pub from: Vec3,
+  pub to: Vec3,
+}
+
 pub fn view(pitch: Rad<f64>, at: Vec3) -> Mat4 {
   Mat4::from_angle_x(pitch) * Mat4::from_translation(at * -1.0)
 }
@@ -20,3 +25,4 @@ pub fn projection(zoom:f64, width:u32, height:u32, pixels_per_unit: f64) -> Mat4
 
   cgmath::ortho(-half_width, half_width, -half_height, half_height, -100.0, 100.0)
 }
+
