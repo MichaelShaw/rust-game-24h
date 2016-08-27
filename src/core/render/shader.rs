@@ -3,14 +3,14 @@
 extern crate glium;
 
 #[derive(Copy, Clone)]
-pub struct PTCVertex {
+pub struct PTCNVertex {
     pub position: [f32; 3],
     pub tex_coord: [f32; 3],
     pub color: [f32; 4],
     pub normal: [f32; 3],
 }
 
-implement_vertex!(PTCVertex, position, tex_coord, color, normal);
+implement_vertex!(PTCNVertex, position, tex_coord, color, normal);
 
 pub fn simple_program<T>(display : &T) -> glium::Program where T : glium::backend::Facade {
   let program = program!(display,

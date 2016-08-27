@@ -1,6 +1,6 @@
 extern crate cgmath;
 
-use core::render::shader::PTCVertex;
+use core::render::shader::PTCNVertex;
 use core::render::TextureRegion;
 use core::{Vec3};
 use cgmath::{Rad, Matrix3, Point3, Transform};
@@ -28,7 +28,7 @@ impl<T : Copy> QuadTesselator<T> {
 pub type Color = [f32; 4];
 
 pub struct GeometryTesselator {
-  pub tesselator: QuadTesselator<PTCVertex>,
+  pub tesselator: QuadTesselator<PTCNVertex>,
   pub scale: Vec3, // scale ... translating pixel coord to real world coords
   pub color: [f32; 4],
 }
@@ -59,10 +59,10 @@ impl GeometryTesselator {
     let nu_right = if flip { tr.nu_min() } else { tr.nu_max() };
 
     self.tesselator.add_quad([
-      PTCVertex { position: [ax as f32,        (y + depth_adjust) as f32, (az + dw + depth_adjust) as f32], tex_coord: [nu_left , tr.nv_min(), layer_f], color: self.color, normal: Y_POS },
-      PTCVertex { position: [(ax + ww) as f32, (y + depth_adjust) as f32, (az + dw + depth_adjust) as f32], tex_coord: [nu_right, tr.nv_min(), layer_f], color: self.color, normal: Y_POS },
-      PTCVertex { position: [(ax + ww) as f32, (y + depth_adjust) as f32, (az + depth_adjust     ) as f32], tex_coord: [nu_right, tr.nv_max(), layer_f], color: self.color, normal: Y_POS },
-      PTCVertex { position: [ax as f32,        (y + depth_adjust) as f32, (az + depth_adjust     ) as f32], tex_coord: [nu_left , tr.nv_max(), layer_f], color: self.color, normal: Y_POS }
+      PTCNVertex { position: [ax as f32,        (y + depth_adjust) as f32, (az + dw + depth_adjust) as f32], tex_coord: [nu_left , tr.nv_min(), layer_f], color: self.color, normal: Y_POS },
+      PTCNVertex { position: [(ax + ww) as f32, (y + depth_adjust) as f32, (az + dw + depth_adjust) as f32], tex_coord: [nu_right, tr.nv_min(), layer_f], color: self.color, normal: Y_POS },
+      PTCNVertex { position: [(ax + ww) as f32, (y + depth_adjust) as f32, (az + depth_adjust     ) as f32], tex_coord: [nu_right, tr.nv_max(), layer_f], color: self.color, normal: Y_POS },
+      PTCNVertex { position: [ax as f32,        (y + depth_adjust) as f32, (az + depth_adjust     ) as f32], tex_coord: [nu_left , tr.nv_max(), layer_f], color: self.color, normal: Y_POS }
     ]);
   }
 
@@ -82,10 +82,10 @@ impl GeometryTesselator {
 
 
     self.tesselator.add_quad([
-      PTCVertex { position: [(ax - hww) as f32, (y + depth_adjust) as f32, (az + hdw + depth_adjust) as f32], tex_coord: [nu_left , tr.nv_min(), layer_f], color: self.color, normal: Y_POS },
-      PTCVertex { position: [(ax + hww) as f32, (y + depth_adjust) as f32, (az + hdw + depth_adjust) as f32], tex_coord: [nu_right, tr.nv_min(), layer_f], color: self.color, normal: Y_POS },
-      PTCVertex { position: [(ax + hww) as f32, (y + depth_adjust) as f32, (az - hdw + depth_adjust) as f32], tex_coord: [nu_right, tr.nv_max(), layer_f], color: self.color, normal: Y_POS },
-      PTCVertex { position: [(ax - hww) as f32, (y + depth_adjust) as f32, (az - hdw + depth_adjust) as f32], tex_coord: [nu_left , tr.nv_max(), layer_f], color: self.color, normal: Y_POS }
+      PTCNVertex { position: [(ax - hww) as f32, (y + depth_adjust) as f32, (az + hdw + depth_adjust) as f32], tex_coord: [nu_left , tr.nv_min(), layer_f], color: self.color, normal: Y_POS },
+      PTCNVertex { position: [(ax + hww) as f32, (y + depth_adjust) as f32, (az + hdw + depth_adjust) as f32], tex_coord: [nu_right, tr.nv_min(), layer_f], color: self.color, normal: Y_POS },
+      PTCNVertex { position: [(ax + hww) as f32, (y + depth_adjust) as f32, (az - hdw + depth_adjust) as f32], tex_coord: [nu_right, tr.nv_max(), layer_f], color: self.color, normal: Y_POS },
+      PTCNVertex { position: [(ax - hww) as f32, (y + depth_adjust) as f32, (az - hdw + depth_adjust) as f32], tex_coord: [nu_left , tr.nv_max(), layer_f], color: self.color, normal: Y_POS }
     ]);
   }
 
@@ -112,17 +112,16 @@ impl GeometryTesselator {
 
 
     self.tesselator.add_quad([
-      PTCVertex { position: [(p0.x + xx) as f32, (p0.y + yy + depth_adjust) as f32, (p0.z + zz + depth_adjust) as f32], tex_coord: [tr.nu_min(), tr.nv_min(), layer_f], color: self.color, normal: Y_POS },
-      PTCVertex { position: [(p1.x + xx) as f32, (p1.y + yy + depth_adjust) as f32, (p1.z + zz + depth_adjust) as f32], tex_coord: [tr.nu_max(), tr.nv_min(), layer_f], color: self.color, normal: Y_POS },
-      PTCVertex { position: [(p2.x + xx) as f32, (p2.y + yy + depth_adjust) as f32, (p2.z + zz + depth_adjust) as f32], tex_coord: [tr.nu_max(), tr.nv_max(), layer_f], color: self.color, normal: Y_POS },
-      PTCVertex { position: [(p3.x + xx) as f32, (p3.y + yy + depth_adjust) as f32, (p3.z + zz + depth_adjust) as f32], tex_coord: [tr.nu_min(), tr.nv_max(), layer_f], color: self.color, normal: Y_POS }
+      PTCNVertex { position: [(p0.x + xx) as f32, (p0.y + yy + depth_adjust) as f32, (p0.z + zz + depth_adjust) as f32], tex_coord: [tr.nu_min(), tr.nv_min(), layer_f], color: self.color, normal: Y_POS },
+      PTCNVertex { position: [(p1.x + xx) as f32, (p1.y + yy + depth_adjust) as f32, (p1.z + zz + depth_adjust) as f32], tex_coord: [tr.nu_max(), tr.nv_min(), layer_f], color: self.color, normal: Y_POS },
+      PTCNVertex { position: [(p2.x + xx) as f32, (p2.y + yy + depth_adjust) as f32, (p2.z + zz + depth_adjust) as f32], tex_coord: [tr.nu_max(), tr.nv_max(), layer_f], color: self.color, normal: Y_POS },
+      PTCNVertex { position: [(p3.x + xx) as f32, (p3.y + yy + depth_adjust) as f32, (p3.z + zz + depth_adjust) as f32], tex_coord: [tr.nu_min(), tr.nv_max(), layer_f], color: self.color, normal: Y_POS }
     ]);
   }
 
   pub fn draw_wall_base_anchored_at(&mut self, tr:&TextureRegion, layer:u32, v:Vec3, depth_adjust:f64, flip:bool) {
     self.draw_wall_base_anchored(tr, layer, v.x, v.y, v.z, depth_adjust, flip)
   }
-
 
   pub fn draw_wall_base_anchored(&mut self, tr:&TextureRegion, layer:u32, ax:f64, ay:f64, z:f64, depth_adjust:f64, flip:bool) {
     let layer_f = layer as f32;
@@ -134,10 +133,10 @@ impl GeometryTesselator {
     let nu_right = if flip { tr.nu_min() } else { tr.nu_max() };
 
     self.tesselator.add_quad([
-      PTCVertex { position: [(ax - hww) as f32, (ay + depth_adjust) as f32,       (z + depth_adjust) as f32], tex_coord: [nu_left , tr.nv_min(), layer_f], color: self.color, normal: Z_POS },
-      PTCVertex { position: [(ax + hww) as f32, (ay + depth_adjust) as f32,       (z + depth_adjust) as f32], tex_coord: [nu_right, tr.nv_min(), layer_f], color: self.color, normal: Z_POS },
-      PTCVertex { position: [(ax + hww) as f32, (ay + hhw + depth_adjust) as f32, (z + depth_adjust) as f32], tex_coord: [nu_right, tr.nv_max(), layer_f], color: self.color, normal: Z_POS },
-      PTCVertex { position: [(ax - hww) as f32, (ay + hhw + depth_adjust) as f32, (z + depth_adjust) as f32], tex_coord: [nu_left , tr.nv_max(), layer_f], color: self.color, normal: Z_POS }
+      PTCNVertex { position: [(ax - hww) as f32, (ay + depth_adjust) as f32,       (z + depth_adjust) as f32], tex_coord: [nu_left , tr.nv_min(), layer_f], color: self.color, normal: Z_POS },
+      PTCNVertex { position: [(ax + hww) as f32, (ay + depth_adjust) as f32,       (z + depth_adjust) as f32], tex_coord: [nu_right, tr.nv_min(), layer_f], color: self.color, normal: Z_POS },
+      PTCNVertex { position: [(ax + hww) as f32, (ay + hhw + depth_adjust) as f32, (z + depth_adjust) as f32], tex_coord: [nu_right, tr.nv_max(), layer_f], color: self.color, normal: Z_POS },
+      PTCNVertex { position: [(ax - hww) as f32, (ay + hhw + depth_adjust) as f32, (z + depth_adjust) as f32], tex_coord: [nu_left , tr.nv_max(), layer_f], color: self.color, normal: Z_POS }
     ]);
   }
 
@@ -155,10 +154,10 @@ impl GeometryTesselator {
     let nu_right = if flip { tr.nu_min() } else { tr.nu_max() };
 
     self.tesselator.add_quad([
-      PTCVertex { position: [(ax - hww) as f32, (ay - hhw + depth_adjust) as f32, (z + depth_adjust) as f32], tex_coord: [nu_left , tr.nv_min(), layer_f], color: self.color, normal: Z_POS },
-      PTCVertex { position: [(ax + hww) as f32, (ay - hhw + depth_adjust) as f32, (z + depth_adjust) as f32], tex_coord: [nu_right, tr.nv_min(), layer_f], color: self.color, normal: Z_POS },
-      PTCVertex { position: [(ax + hww) as f32, (ay + hhw + depth_adjust) as f32, (z + depth_adjust) as f32], tex_coord: [nu_right, tr.nv_max(), layer_f], color: self.color, normal: Z_POS },
-      PTCVertex { position: [(ax - hww) as f32, (ay + hhw + depth_adjust) as f32, (z + depth_adjust) as f32], tex_coord: [nu_left , tr.nv_max(), layer_f], color: self.color, normal: Z_POS }
+      PTCNVertex { position: [(ax - hww) as f32, (ay - hhw + depth_adjust) as f32, (z + depth_adjust) as f32], tex_coord: [nu_left , tr.nv_min(), layer_f], color: self.color, normal: Z_POS },
+      PTCNVertex { position: [(ax + hww) as f32, (ay - hhw + depth_adjust) as f32, (z + depth_adjust) as f32], tex_coord: [nu_right, tr.nv_min(), layer_f], color: self.color, normal: Z_POS },
+      PTCNVertex { position: [(ax + hww) as f32, (ay + hhw + depth_adjust) as f32, (z + depth_adjust) as f32], tex_coord: [nu_right, tr.nv_max(), layer_f], color: self.color, normal: Z_POS },
+      PTCNVertex { position: [(ax - hww) as f32, (ay + hhw + depth_adjust) as f32, (z + depth_adjust) as f32], tex_coord: [nu_left , tr.nv_max(), layer_f], color: self.color, normal: Z_POS }
     ]);
   }
 }

@@ -73,6 +73,7 @@ impl RenderState {
       let front = Vec4::new(n_x, n_y, -1.0, 1.0);
       let back = Vec4::new(n_x, n_y, 1.0, 1.0);
 
+
       let ivp = self.inverse_view_projection();
 
       let front_world = ivp * front;
@@ -134,7 +135,7 @@ pub fn render(display: &glium::Display, rs:&RenderState, time:f64, color: [f32; 
   tesselator.draw_wall_base_anchored_at(&man, 0, Vec3::new(1.5, 0.0, 1.5), 0.0, false);
   tesselator.draw_floor_centre_anchored_at(&man_shadow, 0, Vec3::new(1.5, 0.0, 1.5), 0.01, false);
   
-  let vertex_buffer = glium::VertexBuffer::new(display,&tesselator.tesselator.vertices).unwrap();
+  let vertex_buffer = glium::VertexBuffer::persistent(display,&tesselator.tesselator.vertices).unwrap();
 
   let mvp_raw : [[f64; 4]; 4] = rs.view_projection().into();
   let mvp_raw_downsized = down_size_m4(mvp_raw);
