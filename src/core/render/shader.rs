@@ -34,7 +34,7 @@ pub fn simple_program<T>(display : &T) -> glium::Program where T : glium::backen
                 gl_Position = matrix * vec4(position, 1.0);
                 v_color = color * u_color;
                 v_tex_coord = tex_coord;
-                v_normal = normal; // no model matrix, so no transform required
+                v_normal = normal; 
             }
         ",
 

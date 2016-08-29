@@ -125,6 +125,9 @@ pub fn round_down(f:f64) -> i32 {
   }
 }
 
+// pub use backend::glutin_backend::GlutinFacade as Display;
+
+// pub fn render<F>(display: &F, rs:&RenderState, time:f64, color: [f32; 4], intersection: &Option<Vec3>) where F : glium::backend::Facade {
 pub fn render(display: &glium::Display, rs:&RenderState, time:f64, color: [f32; 4], intersection: &Option<Vec3>) {
   let tesselator_scale = Vec3::new(rs.units_per_pixel(), rs.units_per_pixel(), rs.units_per_pixel());
 

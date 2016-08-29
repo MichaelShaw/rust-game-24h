@@ -12,12 +12,10 @@ pub struct QuadTesselator<T> {
 impl<T : Copy> QuadTesselator<T> {
   pub fn add_quad(&mut self, ts:[T; 4]) {
     for ele in ts.iter() {
-      self.vertices.push(ele.clone());
+      self.vertices.push(*ele);
     }
-    let va = self.vertices[self.vertices.len() - 4];
-    self.vertices.push(va);
-    let vb = self.vertices[self.vertices.len() - 3];
-    self.vertices.push(vb);
+    self.vertices.push(ts[0]);
+    self.vertices.push(ts[2]);
   }
 
   pub fn clear(&mut self) {
