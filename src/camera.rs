@@ -55,6 +55,12 @@ pub fn projection(width:u32, height:u32, pixels_per_unit: f64) -> Mat4 {
     cgmath::ortho(-half_width, half_width, -half_height, half_height, -100.0, 100.0)
 }
 
+pub fn interface(width:u32, height:u32) -> Mat4 {
+    cgmath::ortho(0.0, width as f64, 0.0, height as f64, -100.0, 100.0)
+}
+
+// ortho<S: BaseFloat>(left: S, right: S, bottom: S, top: S, near: S, far: S) -> Matrix4<S> {
+
 pub fn ray_for_mouse_position(inverse_view_projection:Mat4, width:u32, height:u32, x:i32, y:i32) -> Option<geometry::Line> {
     if 0 <= x && x < (width as i32) && 0 <= y && y < (height as i32) {
         let n_x = (x as f64) / (width as f64) * 2.0 - 1.0;

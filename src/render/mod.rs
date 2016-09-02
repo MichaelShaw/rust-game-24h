@@ -7,6 +7,10 @@ pub mod quads;
 pub mod shader;
 pub mod texture;
 
+pub use self::quads::*;
+pub use self::shader::*;
+pub use self::texture::*;
+
 pub fn build_window() -> glium::Display { 
     use glium::DisplayBuild;
     use glium::glutin::GlRequest;

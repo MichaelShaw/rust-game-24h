@@ -5,6 +5,7 @@ authors = ["Michael Shaw <michaeljshaw@gmail.com>"]
 
 [dependencies]
 glium = { version = "0.15.0", features = ["glutin"] }
+glium_text = "0.10.0"
 glutin = "0.6.1"
 image = "0.10.1"
 cgmath = "0.11.0"

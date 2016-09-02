@@ -34,6 +34,8 @@ pub const WHITE : Color = [1.0, 1.0, 1.0, 1.0];
 const X_POS : [f32; 3] = [1.0, 0.0, 0.0];
 const Y_POS : [f32; 3] = [0.0, 1.0, 0.0];
 const Z_POS : [f32; 3] = [0.0, 0.0, 1.0];
+
+const Z_NEG : [f32; 3] = [0.0, 0.0, -1.0];
  
 impl GeometryTesselator {
     pub fn new(scale:Vec3) -> GeometryTesselator {
@@ -62,7 +64,39 @@ impl GeometryTesselator {
         ]);
     }
 
-       // anchor is near x/z coord
+    pub fn draw_ui(&mut self, tr:&TextureRegion, layer: u32, x:f64, y:f64, z:f64, flip:bool, scale: f64) {
+        let layer_f = layer as f32;
+        let ww = (tr.width() as f64) * scale;
+        let hw = (tr.height() as f64) * scale;
+
+        let nu_left = if flip { tr.nu_max() } else { tr.nu_min() };
+        let nu_right = if flip { tr.nu_min() } else { tr.nu_max() };
+
+        self.tesselator.add_quad([
+            PTCNVertex { position: [x as f32,        (y) as f32,      z as f32], tex_coord: [nu_left , tr.nv_min(), layer_f], color: self.color, normal: Z_POS },
+            PTCNVertex { position: [(x + ww) as f32, (y) as f32,      z as f32], tex_coord: [nu_right, tr.nv_min(), layer_f], color: self.color, normal: Z_POS },
+            PTCNVertex { position: [(x + ww) as f32, (y + hw) as f32, z as f32], tex_coord: [nu_right, tr.nv_max(), layer_f], color: self.color, normal: Z_POS },
+            PTCNVertex { position: [x as f32,        (y + hw) as f32, z as f32], tex_coord: [nu_left , tr.nv_max(), layer_f], color: self.color, normal: Z_POS }
+        ]);
+    }
+
+    pub fn draw_ui_centered(&mut self, tr:&TextureRegion, layer: u32, x:f64, y:f64, z:f64, flip:bool, scale: f64) {
+        let layer_f = layer as f32;
+        let hww = (tr.width() as f64) * scale;
+        let hhw = (tr.height() as f64) * scale;
+
+        let nu_left = if flip { tr.nu_max() } else { tr.nu_min() };
+        let nu_right = if flip { tr.nu_min() } else { tr.nu_max() };
+
+        self.tesselator.add_quad([
+            PTCNVertex { position: [(x - hww) as f32, (y - hhw) as f32, z as f32], tex_coord: [nu_left , tr.nv_min(), layer_f], color: self.color, normal: Z_POS },
+            PTCNVertex { position: [(x + hww) as f32, (y - hhw) as f32, z as f32], tex_coord: [nu_right, tr.nv_min(), layer_f], color: self.color, normal: Z_POS },
+            PTCNVertex { position: [(x + hww) as f32, (y + hhw) as f32, z as f32], tex_coord: [nu_right, tr.nv_max(), layer_f], color: self.color, normal: Z_POS },
+            PTCNVertex { position: [(x - hww) as f32, (y + hhw) as f32, z as f32], tex_coord: [nu_left , tr.nv_max(), layer_f], color: self.color, normal: Z_POS }
+        ]);
+    }
+
+    // anchor is near x/z coord
     pub fn draw_wall_tile(&mut self, tr:&TextureRegion, layer:u32, ax:f64, y:f64, az:f64, depth_adjust:f64, flip:bool) {
         let layer_f = layer as f32;
         let ww = (tr.width() as f64) * self.scale.x;

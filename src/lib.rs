@@ -13,6 +13,8 @@ pub mod geometry;
 pub mod game {
     pub mod simple;
 }
+pub mod spring;
+
 
 pub type Color = [f32; 4];
 
