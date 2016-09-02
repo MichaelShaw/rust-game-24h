@@ -28,3 +28,15 @@ pub type Vec4 = cgmath::Vector4<f64>;
 
 pub type Mat3 = cgmath::Matrix3<f64>;
 pub type Mat4 = cgmath::Matrix4<f64>;
+
+pub fn round_down(f:f64) -> i32 {
+    if f < 0.0 {
+        f as i32 - 1
+    } else {
+        f as i32
+    }
+}
+
+pub fn round_down_v3(v:Vec3) -> Vec3i {
+    Vec3i::new(round_down(v.x), round_down(v.y), round_down(v.z))
+}

@@ -11,7 +11,7 @@ pub use self::quads::*;
 pub use self::shader::*;
 pub use self::texture::*;
 
-pub fn build_window() -> glium::Display { 
+pub fn build_window(title:String) -> glium::Display { 
     use glium::DisplayBuild;
     use glium::glutin::GlRequest;
     use glium::glutin::GlProfile;
@@ -19,19 +19,12 @@ pub fn build_window() -> glium::Display {
     use glium::glutin::WindowBuilder;
 
     WindowBuilder::new()
+        .with_title(title)
         .with_gl_profile(GlProfile::Core)
         .with_gl(GlRequest::Specific(Api::OpenGl,(4,0)))
         .with_depth_buffer(24)
         .build_glium()
         .unwrap()
-}
-
-pub fn round_down(f:f64) -> i32 {
-    if f < 0.0 {
-        f as i32 - 1
-    } else {
-        f as i32
-    }
 }
 
 pub fn translucent_draw_params<'a>() -> glium::DrawParameters<'a> {

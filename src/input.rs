@@ -14,6 +14,12 @@ pub struct MouseState {
     pub mouse_wheel_delta: i32, // we multiply the float delta by 100 and round it
 }
 
+impl MouseState {
+    pub fn left_pushed(&self) -> bool {
+        self.pushed.contains(&glutin::MouseButton::Left)
+    }
+}
+
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct KeyState {
     pub down: HashSet<glutin::VirtualKeyCode>,
