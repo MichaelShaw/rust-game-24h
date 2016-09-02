@@ -14,6 +14,7 @@ pub mod game {
     pub mod simple;
 }
 pub mod spring;
+pub mod audio;
 
 
 pub type Color = [f32; 4];
