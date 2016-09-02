@@ -10,6 +10,8 @@ pub struct MouseState {
     pub down: HashSet<glutin::MouseButton>,
     pub pushed: HashSet<glutin::MouseButton>,
     pub released: HashSet<glutin::MouseButton>,
+
+    pub mouse_wheel_delta: i32, // we multiply the float delta by 100 and round it
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -33,6 +35,8 @@ pub fn produce(input:&InputState, events: &Vec<glutin::Event>) -> InputState {
     next_input.mouse.pushed.clear();
     next_input.mouse.released.clear();
 
+    next_input.mouse.mouse_wheel_delta = 0;
+
     for event in events {
         match event {
             &glutin::Event::KeyboardInput(element_state, _, Some(key_code)) => 
@@ -52,6 +56,9 @@ pub fn produce(input:&InputState, events: &Vec<glutin::Event>) -> InputState {
                         }
                     }
                 },
+            &glutin::Event::MouseWheel(glutin::MouseScrollDelta::LineDelta(_, mouse_scroll_delta), _) => {
+                next_input.mouse.mouse_wheel_delta += (mouse_scroll_delta * 100.0) as i32;
+            },
             &glutin::Event::MouseInput(element_state, mouse_button) =>
                 match element_state {
                     glutin::ElementState::Pressed => {
@@ -85,6 +92,7 @@ impl InputState {
                 down: HashSet::new(),
                 pushed: HashSet::new(),
                 released: HashSet::new(),
+                mouse_wheel_delta: 0,
             },
             keys: KeyState {
                 down: HashSet::new(),
