@@ -2,6 +2,18 @@ extern crate cgmath;
 
 use super::*;
 
+pub struct SpringState {
+    pub position:Vec3,
+    pub velocity:Vec3,
+}
+
+impl SpringState {
+    pub fn advance(&mut self, target:Vec3, smooth_time:f64, time_delta: f64) {
+        let (new_position, new_velocity) = smooth_3d(self.position, target, self.velocity, smooth_time, time_delta);
+        self.position = new_position;
+        self.velocity = new_velocity;
+    }
+}
 
 pub fn smooth_3d(from:Vec3, to:Vec3, velocity:Vec3, smooth_time:f64, time_delta:f64) -> (Vec3, Vec3) {
     let omega = 2.0 / smooth_time;
