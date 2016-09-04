@@ -21,6 +21,24 @@ pub fn st(str_ref: &str) -> String {
     String::from(str_ref)
 }
 
+pub fn clamp<T : Ord>(n:T, min:T, max:T) -> T {
+    if n < min {
+        min
+    } else if n > max {
+        max
+    } else {
+        n
+    }
+}
+
+pub fn vec2i(x:i32, y:i32) -> Vec2i {
+    Vec2i::new(x, y)
+}
+
+pub fn lerp(a:Vec3, b:Vec3, alpha:f64) -> Vec3 {
+    b * alpha + a * (1.0 - alpha)
+}
+
 pub type Vec2i = cgmath::Vector2<i32>;
 pub type Vec2Size = cgmath::Vector2<usize>;
 pub type Vec3i = cgmath::Vector3<i32>;
