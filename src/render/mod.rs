@@ -11,20 +11,23 @@ pub use self::quads::*;
 pub use self::shader::*;
 pub use self::texture::*;
 
-pub fn build_window(title:String) -> glium::Display { 
+pub fn build_window(title:String, vsync:bool) -> glium::Display { 
     use glium::DisplayBuild;
     use glium::glutin::GlRequest;
     use glium::glutin::GlProfile;
     use glium::glutin::Api;
     use glium::glutin::WindowBuilder;
 
-    WindowBuilder::new()
+
+    let mut builder = WindowBuilder::new()
         .with_title(title)
         .with_gl_profile(GlProfile::Core)
         .with_gl(GlRequest::Specific(Api::OpenGl,(4,0)))
-        .with_depth_buffer(24)
-        // .with_vsync()
-        .build_glium()
+        .with_depth_buffer(24);
+    if vsync {
+        builder = builder.with_vsync();
+    }
+    builder.build_glium()
         .unwrap()
 }
 
