@@ -15,9 +15,11 @@ pub mod game {
 }
 pub mod spring;
 pub mod audio;
+pub mod color;
 
-
-pub type Color = [f32; 4];
+pub fn st(str_ref: &str) -> String {
+    String::from(str_ref)
+}
 
 pub type Vec2i = cgmath::Vector2<i32>;
 pub type Vec2Size = cgmath::Vector2<usize>;

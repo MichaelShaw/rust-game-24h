@@ -2,7 +2,8 @@ extern crate cgmath;
 
 use render::shader::PTCNVertex;
 use render::texture::TextureRegion;
-use {Vec3, Color};
+use {Vec3};
+use color::*;
 use cgmath::{Rad, Matrix3, Point3, Transform};
 
 pub struct QuadTesselator<T> {
@@ -26,10 +27,10 @@ impl<T : Copy> QuadTesselator<T> {
 pub struct GeometryTesselator {
     pub tesselator: QuadTesselator<PTCNVertex>,
     pub scale: Vec3, // scale ... translating pixel coord to real world coords
-    pub color: Color,
+    pub color: ColorFloatRaw,
 }
 
-pub const WHITE : Color = [1.0, 1.0, 1.0, 1.0];
+pub const WHITE : ColorFloatRaw = [1.0, 1.0, 1.0, 1.0];
 
 const X_POS : [f32; 3] = [1.0, 0.0, 0.0];
 const Y_POS : [f32; 3] = [0.0, 1.0, 0.0];
