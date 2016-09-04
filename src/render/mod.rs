@@ -23,6 +23,7 @@ pub fn build_window(title:String) -> glium::Display {
         .with_gl_profile(GlProfile::Core)
         .with_gl(GlRequest::Specific(Api::OpenGl,(4,0)))
         .with_depth_buffer(24)
+        .with_vsync()
         .build_glium()
         .unwrap()
 }
