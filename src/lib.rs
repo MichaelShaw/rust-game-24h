@@ -22,7 +22,17 @@ pub fn st(str_ref: &str) -> String {
     String::from(str_ref)
 }
 
-pub fn clamp<T : Ord>(n:T, min:T, max:T) -> T {
+// pub fn clamp<T : Ord>(n:T, min:T, max:T) -> T {
+//     if n < min {
+//         min
+//     } else if n > max {
+//         max
+//     } else {
+//         n
+//     }
+// }
+
+pub fn clamp<T : PartialOrd>(n:T, min:T, max:T) -> T {
     if n < min {
         min
     } else if n > max {
@@ -31,6 +41,7 @@ pub fn clamp<T : Ord>(n:T, min:T, max:T) -> T {
         n
     }
 }
+
 
 pub fn vec2i(x:i32, y:i32) -> Vec2i {
     Vec2i::new(x, y)

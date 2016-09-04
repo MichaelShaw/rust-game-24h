@@ -30,15 +30,17 @@ impl Camera {
         self.projection() * self.view()
     }
 
-    pub fn inverse_view_projection(&self) -> Mat4 {
+    pub fn inverse_view_projection(&self) -> Option<Mat4> {
         use cgmath::SquareMatrix;
         let vp = self.view_projection();
-        vp.invert().unwrap()
+        vp.invert()
     }
 
     pub fn ray_for_mouse_position(&self, x:i32, y:i32) -> Option<geometry::Line> {
         let (width, height) = self.viewport;
-        ray_for_mouse_position(self.inverse_view_projection(), width, height, x, y)
+        self.inverse_view_projection().and_then(|ivp| {
+            ray_for_mouse_position(ivp, width, height, x, y)
+        })
     }
 }
 
