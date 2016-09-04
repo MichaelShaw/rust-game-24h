@@ -20,6 +20,7 @@ pub mod audio;
 pub type Color = [f32; 4];
 
 pub type Vec2i = cgmath::Vector2<i32>;
+pub type Vec2Size = cgmath::Vector2<usize>;
 pub type Vec3i = cgmath::Vector3<i32>;
 
 pub type Vec3 = cgmath::Vector3<f64>;
