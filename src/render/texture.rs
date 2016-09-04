@@ -47,6 +47,31 @@ impl TiledTexture {
 
         return regions 
     }
+
+    pub fn at_d2(&self, x:u32, y:u32) -> [[TextureRegion; 2] ; 2] {
+        let w: u32 = self.texture.get_width();
+        let pixels_per_tile = w / self.tiles;
+        let tile_size = pixels_per_tile / 2;
+
+        let mut regions = [[NULL_REGION; 2]; 2];
+        
+        let xs = x * pixels_per_tile;
+        let ys = y * pixels_per_tile;
+        
+        for x in 0..2_u32 {
+            for y in 0..2_u32 {
+                regions[x as usize][y as usize] = TextureRegion {
+                    u_min: xs + x * tile_size,
+                    u_max: xs + (x + 1) * tile_size,
+                    v_min: ys + y * tile_size,
+                    v_max: ys + (y + 1) * tile_size,
+                    texture_size: w,
+                }
+            }
+        }
+
+        return regions 
+    }
 }
 
 pub fn load_tiled_texture<F>(display: &F, paths: &[&Path], tiles: u32) -> TiledTexture where F : glium::backend::Facade {
