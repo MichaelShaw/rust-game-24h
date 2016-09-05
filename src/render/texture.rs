@@ -78,9 +78,7 @@ pub fn load_tiled_texture<F>(display: &F, paths: &[&Path], tiles: u32) -> TiledT
     use glium::texture;
 
     let mut images : Vec<texture::RawImage2d<u8>> = vec![];
-    // let v: Vec<i32> = vec![];
-    // pub type RgbaImage = ImageBuffer<Rgba<u8>, Vec<u8>>;
-    // RawImage2d<'a, T>
+
     for path in paths {
         let image = image::open(path).unwrap().to_rgba();
         let image_dimensions = image.dimensions();
